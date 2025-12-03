@@ -20,6 +20,7 @@ class TransitModel:
         params_dict : dict
             Dictionary containing transit parameters loaded from YAML file
         """
+        self.name = params_dict.get('name', 'Unknown')
         self.params = batman.TransitParams()
         self.params.t0 = params_dict.get('t0', 0.0)
         self.params.per = params_dict.get('per')
@@ -49,6 +50,10 @@ class TransitModel:
         self.flux = self.model.light_curve(self.params)
         return self.flux
     
+    def compute(self): 
+        """Return (t, flux) tuple for convenience.""" 
+        return self.t, self.compute_light_curve()
+    
     def plot_light_curve(self, output_file='lc.png'):
         """
         Plot and save the transit light curve.
@@ -58,16 +63,49 @@ class TransitModel:
         output_file : str, optional
             Output filename for the plot (default: 'lc.png')
         """
-        if not hasattr(self, 'flux'):
-            self.compute_light_curve()
-        
+        t = np.linspace(-0.25, 0.25, 1000)
+        m = batman.TransitModel(self.params, t)
+        flux = m.light_curve(self.params)
+
         plt.figure(figsize=(10, 6))
-        plt.plot(self.t, self.flux)
+        plt.plot(t, flux)
         plt.xlabel("Time from central transit (days)")
         plt.ylabel("Relative flux")
+        plt.title(f"Light curve of {self.name}")
+        plt.grid()
+        plt.tight_layout()
         plt.savefig(output_file)
         plt.show()
+
         print(f"Light curve saved to {output_file}")
+        
+    @staticmethod 
+    def plot_multiple_light_curves(model_list, output_file="lcs.png"): 
+        """ Overplot multiple transit light curves and save them. 
+        
+        Parameters 
+        ---------- 
+        output_file : str, optional 
+            Output filename for the plot (default: 'lcs.png') 
+        """ 
+        plt.figure(figsize=(10, 6))
+
+        for model in model_list:
+            t = np.linspace(-0.25, 0.25, 1000)
+            m = batman.TransitModel(model.params, t)
+            flux = m.light_curve(model.params)
+            plt.plot(t, flux, label=model.name)
+
+        plt.xlabel("Time from central transit (days)")
+        plt.ylabel("Relative flux")
+        plt.title("Overplotted Transit Models")
+        plt.grid()
+        plt.tight_layout()
+        plt.legend()
+        plt.savefig(output_file)
+
+        print(f"Light curve saved to {output_file}")
+
     
     def run(self, output_file='lc.png'):
         """

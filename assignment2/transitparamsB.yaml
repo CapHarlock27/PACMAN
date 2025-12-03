@@ -1,0 +1,11 @@
+transit:
+  name: "K2-18_b_littleBrother"         # name of the exoplanet
+  t0: 0                                 # time of inferior conjunction
+  per: 32.939623                        # orbital period
+  rp: 0.0106                            # planet radius (in units of stellar radii)
+  a: 30.73                              # semi-major axis (in units of stellar radii)
+  inc: 89.5785                          # orbital inclination (in degrees)
+  ecc: 0.2                              # eccentricity
+  w: 354.3                              # longitude of periastron (in degrees)
+  u: [0.391617, 0.019183]               # limb darkening coefficients [u1, u2]
+  limb_darkening_model: "quadratic"     # limb darkening model

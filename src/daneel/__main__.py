@@ -10,10 +10,11 @@ def main():
     parser.add_argument(
         "-i",
         "--input",
-        dest = "input_file",
+        dest = "input_files",
         type = str,
+        nargs="+",
         required = True,
-        help = "Input parameter file to pass",
+        help = "Input parameter file(s) to pass",
     )
 
     parser.add_argument(
@@ -50,11 +51,25 @@ def main():
     start = datetime.datetime.now()
     print(f"Daneel starts at {start}")
 
-    input_params = Parameters(args.input_file).params
-    
     if args.transit:
-        transit = TransitModel(input_params['transit'])
-        transit.plot_light_curve()
+        
+        if len(args.input_files) == 1:
+            filename = args.input_files[0]
+            input_params = Parameters(filename).params
+            transit_section = input_params["transit"]
+
+            model = TransitModel(transit_section)
+            model.plot_light_curve()  
+
+        
+        else:
+            models = []
+            for f in args.input_files:
+                input_params = Parameters(f).params
+                transit_section = input_params["transit"]
+                models.append(TransitModel(transit_section))
+
+            TransitModel.plot_multiple_light_curves(models)  
     elif args.detect:
         pass
     elif args.atmosphere:

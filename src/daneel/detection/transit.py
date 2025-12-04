@@ -41,3 +41,4 @@ class TransitModel:
         plt.grid()
         plt.tight_layout()
         plt.savefig(f"{self.name}_assignment1_taskF.png")
+        plt.close()

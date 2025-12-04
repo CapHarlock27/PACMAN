@@ -75,7 +75,7 @@ class TransitModel:
         plt.grid()
         plt.tight_layout()
         plt.savefig(output_file)
-        plt.show()
+        plt.close()
 
         print(f"Light curve saved to {output_file}")
         
@@ -103,6 +103,7 @@ class TransitModel:
         plt.tight_layout()
         plt.legend()
         plt.savefig(output_file)
+        plt.close()
 
         print(f"Light curve saved to {output_file}")
 

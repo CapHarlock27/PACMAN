@@ -26,15 +26,14 @@ def main():
         action = "store_true",
     )
     
-
-    # parser.add_argument(
-    #     "-d",
-    #     "--detect",
-    #     dest = "detect",
-    #     required = False,
-    #     help = "Initialise detection algorithms for Exoplanets",
-    #     action = "store_true",
-    # )
+    parser.add_argument(
+        "-d",
+        "--detect",
+        dest="detect",
+        type=str,                     
+        required=False,
+        help="Initialise detection algorithms for Exoplanets (cnn or rf)",
+    )
 
     # parser.add_argument(
     #     "-a",
@@ -70,10 +69,17 @@ def main():
                 models.append(TransitModel(transit_section))
 
             TransitModel.plot_multiple_light_curves(models)  
-    elif args.detect:
-        pass
+        transit = TransitModel(input_params['transit'])
+        transit.plot_light_curve()
+    elif args.detect == "cnn":
+        from daneel.detection.classifiers import CNNClassifier
+        CNN_class = CNNClassifier(input_params)
+        CNN_class.run()
     elif args.atmosphere:
         pass
+    elif args.detect is not None:
+        print(f"\nUnknown detection method: {args.detect}")
+        print("Valid options are: cnn")
 
     finish = datetime.datetime.now()
     print(f"Daneel finishes at {finish}")

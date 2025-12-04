@@ -35,15 +35,15 @@ def main():
         help = "'Dream' exoplanetary transit light curve(s) from a trained GAN (requires path to .pt weights)",
         action = "store_true",
     )
-
-    # parser.add_argument(
-    #     "-d",
-    #     "--detect",
-    #     dest = "detect",
-    #     required = False,
-    #     help = "Initialise detection algorithms for Exoplanets",
-    #     action = "store_true",
-    # )
+    
+    parser.add_argument(
+        "-d",
+        "--detect",
+        dest = "detect",
+        type = str,                     
+        required = False,
+        help = "Initialise detection algorithms for Exoplanets (CNN or RF)",
+    )
 
     # parser.add_argument(
     #     "-a",
@@ -95,7 +95,18 @@ def main():
                 transit_section = input_params["transit"]
                 models.append(TransitModel(transit_section))
 
-            TransitModel.plot_multiple_light_curves(models)
+            TransitModel.plot_multiple_light_curves(models)  
+        transit = TransitModel(input_params['transit'])
+        transit.plot_light_curve()
+
+    elif args.detect == "cnn":
+        from daneel.detection.classifiers import CNNClassifier
+        CNN_class = CNNClassifier(input_params)
+        CNN_class.run()
+
+    elif args.detect is not None:
+        print(f"\nUnknown detection method: {args.detect}")
+        print("Valid options are: cnn")
     
     elif args.dream:
         weights_path = args.input_files[0]
@@ -106,8 +117,6 @@ def main():
         dreamer = Dream(weights_path, n_plots)
         dreamer.dream(output_file = output_file_name)
 
-    elif args.detect:
-        pass
     elif args.atmosphere:
         pass
     

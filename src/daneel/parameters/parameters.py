@@ -13,10 +13,19 @@ class Parameters:
     """
 
     def __init__(self, input_file):
-        if os.path.exists(input_file) and os.path.isfile(input_file):
-            with open(input_file) as in_f:
-                self.params = yaml.load(in_f, Loader = yaml.FullLoader)
 
+        # Expand path so "examples/params.yaml" always works
+        input_file = os.path.expanduser(input_file)
+        input_file = os.path.abspath(input_file)
+
+        if not os.path.exists(input_file):
+            raise FileNotFoundError(f"\nERROR: Parameter file not found:\n{input_file}")
+
+        # Load YAML file
+        with open(input_file) as in_f:
+            self.params = yaml.load(in_f, Loader=yaml.FullLoader)
+
+        # Convert "None" strings to real None
         for par in list(self.params.keys()):
             if self.params[par] == "None":
                 self.params[par] = None

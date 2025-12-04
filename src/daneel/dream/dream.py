@@ -68,7 +68,7 @@ class Dream:
                 ax = plt.subplot(rows, cols, i + 1)
                 ax.plot(light_curve, lw = 1, c = 'C0')
                 # x = np.arange(len(light_curve))
-                # ax.scatter(x, light_curve, s = 2, c = 'C0', alpha = 0.7)
+                # ax.scatter(x, light_curve, s = 2, c = 'C0', alpha = 0.7)                  # scatter plot does not look good
                 ax.set_title(f"Generated Transit {i+1}")
                 ax.grid(alpha = 0.3)
                 ax.set_ylim(0.4, 1.0)

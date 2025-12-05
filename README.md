@@ -52,12 +52,17 @@ daneel -i <input_file> [options]
 # Run exoplanet transit light curve plot
 daneel -i parameters.yaml -t
 
-# Run exoplanet detection
-daneel -i parameters.yaml -d
+# Run exoplanet detection using Convolutional Neural Network
+daneel -i parameters.yaml -d cnn 
+
+# Run exoplanet detection using Random Forest
+daneel -i parameters.yaml -d rf 
 
 # Run generation of synthetic light curves
-daneel -i generator_weights.pt --dream                                          # generates 1 light curve and produce GAN_generated_transits.png
-daneel -i generator_weights.pt --dream --n_plots 5 -o ~/syntetic_transit.png    # generates 5 light curves and produce syntetic_transit.png in the directory ~/
+# generates 1 light curve and produce GAN_generated_transits.png
+daneel -i generator_weights.pt --dream      
+# generates 5 light curves and produce syntetic_transit.png in the directory ~/
+daneel -i generator_weights.pt --dream --n_plots 5 -o ~/syntetic_transit.png    
 
 # Run atmospheric characterization
 daneel -i parameters.yaml -a

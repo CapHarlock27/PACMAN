@@ -101,6 +101,8 @@ def main():
 
     elif args.detect == "cnn":
         from daneel.detection.classifiers import CNNClassifier
+        filename = args.input_files[0]
+        input_params = Parameters(filename).params
         CNN_class = CNNClassifier(input_params)
         CNN_class.run()
 

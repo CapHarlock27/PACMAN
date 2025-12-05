@@ -14,8 +14,10 @@ classifier:
 
 cnn:
   dataset_path: /ca25/comp_astro25/tess_data.csv
+  result_dir: /ca25/comp_astro25/cnn_results
   n_bins: 1000
   samples_per_class: 350
   learning_rate: 0.0001
   kernel_size: 3
   epochs: 200
+  

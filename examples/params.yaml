@@ -11,10 +11,32 @@ transit:
 
 classifier:
   type: cnn
+  type: rf
+
+rf:
+  dataset_path: /ca25/ext_volume/comp_astro_25/tess_data.csv
+  n_bins: 1000
+  samples_per_class: 350  
+  scaler: False
+  n_estimators: 1000
+  class_weight: "balanced"
+  max_depth: 10
+  min_samples_leaf: 1
+  max_features: 'sqrt'
+  bootstrap: True
+  n_jobs: -1
+  oob_score: True
+  results_dir: /ca25/ext_volume/comp_astro_25/rf_results
+
+
 
 cnn:
+<<<<<<< HEAD
   dataset_path: /ca25/comp_astro25/tess_data.csv
   result_dir: /ca25/comp_astro25/cnn_results
+=======
+  dataset_path: /ca25/ext_volume/comp_astro_25/tess_data.csv
+>>>>>>> f9069c3 (Assigment2 Task G completed + tweaks to Task H, params.yaml, and parsers in main, also includes Random Forest model using GridSearchCV and plots corresponding to the statistics of the model)
   n_bins: 1000
   samples_per_class: 350
   learning_rate: 0.0001

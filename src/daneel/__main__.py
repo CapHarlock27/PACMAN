@@ -99,6 +99,13 @@ def main():
         transit = TransitModel(input_params['transit'])
         transit.plot_light_curve()
 
+    elif args.detect == "rf":
+        from daneel.detection.classifiers import RandomForestClassifier
+        filename = args.input_files[0]
+        input_params = Parameters(filename).params
+        RF_class = RandomForestClassifier(input_params)
+        RF_class.run()
+
     elif args.detect == "cnn":
         from daneel.detection.classifiers import CNNClassifier
         filename = args.input_files[0]
@@ -108,7 +115,7 @@ def main():
 
     elif args.detect is not None:
         print(f"\nUnknown detection method: {args.detect}")
-        print("Valid options are: cnn")
+        print("Valid options are: cnn or rf")
     
     elif args.dream:
         weights_path = args.input_files[0]

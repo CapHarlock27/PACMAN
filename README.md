@@ -40,6 +40,8 @@ daneel -i <input_file> [options]
 #### Main Actions
 - `-t, -- transit`: Plot an exoplanet transit light curve from the input parameters
 - `-d, --detect`: Initialize detection algorithms for exoplanets
+    - `rf`: Use Random Forest Classifier model to detect exoplanets
+    - `cnn`: Use Convolutional Neural Network model to detect exoplanets
 - `--dream`: Generate and plot synthetic exoplanet transit light curves using a GAN trained on TESS data
     - `--n_plots`: Number of GAN-generated light curves to produce when using --dream. *(Optional; default behavior if omitted)*
 - `-a, --atmosphere`: Perform atmospheric characterization using the supplied transmission spectrum

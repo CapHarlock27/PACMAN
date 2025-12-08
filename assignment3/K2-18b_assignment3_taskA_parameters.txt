@@ -1,0 +1,24 @@
+Input Parameters for K2-18b Transmission Model
+=============================================
+
+Planet Parameters:
+  Planet Radius (Rj): 0.211
+  Planet Mass (Mj): 0.028
+
+Star Parameters:
+  Star Temperature (K): 3457.0
+  Star Radius (Rs): 0.41
+
+Temperature Profile:
+  Irradiation Temperature (T_irr): 284.0
+
+Chemistry:
+  H2O Mixing Ratio: 6.259e-03
+  CH4 Mixing Ratio: 2.060e-06
+  CO2 Mixing Ratio: 5.721e-05
+  CO Mixing Ratio: 6.502e-03
+
+Atmospheric Pressure Range:
+  Min Pressure (bar): 1.0
+  Max Pressure (bar): 1000000.0
+  Number of Layers: 30

@@ -1,0 +1,20 @@
+Input Parameters for K2-18b Transmission Model
+=============================================
+
+Planet Parameters:
+  Planet Radius (Rj): 0.211
+  Planet Mass (Mj): 0.028
+
+Star Parameters:
+  Star Temperature (K): 3457.0
+  Star Radius (Rs): 0.41
+
+Temperature Profile:
+  Irradiation Temperature (T_irr): 284.0
+
+Chemistry of the atmosphere (all values in log10 of Volume Mixing Ratio):
+CH4: -2.04
+CO2: -1.75
+CO: -3.21
+H2O: -3.00
+Reference paper for abundances: Madhusudhan et al. 2023, https://arxiv.org/abs/2309.05566

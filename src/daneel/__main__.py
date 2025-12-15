@@ -148,8 +148,17 @@ def main():
         forward_model = ForwardModel(params)
         forward_model.run(plot)
 
-    # elif args.atmosphere == 'retrieve':
-    #     from daneel.atmosphere.retrieval import RetrievalModel
+    elif args.atmosphere == 'retrieve':
+        from daneel.atmosphere.retrieval import RetrievalModel
+        filename = args.input_files[0]
+        plot = args.plot
+        input_params = Parameters(filename).params
+        if 'retrieval' in input_params:
+            params = input_params['retrieval']
+        else:
+            params = input_params
+        retrieval = RetrievalModel(params)
+        retrieval.run(plot)
 
     elif args.atmosphere is not None:
         print(f"\nUnknown atmosphere flag: {args.atmosphere}")

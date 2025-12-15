@@ -1,8 +1,6 @@
 import datetime
 import argparse
 from daneel.parameters import Parameters
-from daneel.detection import *
-from daneel.dream import Dream
 
 def main():
     parser = argparse.ArgumentParser()
@@ -45,14 +43,14 @@ def main():
         help = "Initialise detection algorithms for Exoplanets (CNN or RF)",
     )
 
-    # parser.add_argument(
-    #     "-a",
-    #     "--atmosphere",
-    #     dest ="complete",
-    #     required = False,
-    #     help = "Atmospheric Characterisazion from input transmission spectrum",
-    #     action = "store_true",
-    # )
+    parser.add_argument(
+        "-a",
+        "--atmosphere",
+        dest = "atmosphere",
+        type = str,
+        required = False,
+        help = "Atmospheric characterisazion from input transmission spectrum (model or retrieve)",
+    )
 
     # Dedicated Dream arguments
     parser.add_argument(
@@ -68,8 +66,16 @@ def main():
         "--output",
         dest = "output_file",
         type = str,
-        default = "GAN_generated_transits.png",
-        help = "Filename to save the generated plot (default: GAN_generated_transits.png)",
+        help = "Path and/or filename to save the generated plot(s)",
+    )
+
+    # Dedicated Atmosphere arguments
+    parser.add_argument(
+        "--plot",
+        dest = "plot",
+        type = bool,
+        default = False,
+        help = "Plot the atmospheric spectrum results (default: False)",
     )
 
     args = parser.parse_args()
@@ -79,7 +85,7 @@ def main():
     print(f"Daneel starts at {start}")
 
     if args.transit:
-        
+        from daneel.detection.transit_model import TransitModel
         if len(args.input_files) == 1:
             filename = args.input_files[0]
             input_params = Parameters(filename).params
@@ -114,20 +120,40 @@ def main():
         CNN_class.run()
 
     elif args.detect is not None:
-        print(f"\nUnknown detection method: {args.detect}")
-        print("Valid options are: cnn or rf")
+        print(f"\nUnknown detection flag: {args.detect}")
+        print("Valid options are: cnn or rf.")
     
     elif args.dream:
+        from daneel.dream import Dream
         weights_path = args.input_files[0]
         n_plots = args.n_plots
-        output_file_name = args.output_file
+        if args.output_file is None:
+            output_file_name = "GAN_generated_transits.png"
+        else:
+            output_file_name = args.output_file
         print(f"Loading weights from: {weights_path}")
         print(f"Generating {n_plots} sample(s)...")
         dreamer = Dream(weights_path, n_plots)
         dreamer.dream(output_file = output_file_name)
 
-    elif args.atmosphere:
-        pass
+    elif args.atmosphere == 'model':
+        from daneel.atmosphere.forward_model import ForwardModel
+        filename = args.input_files[0]
+        plot = args.plot
+        input_params = Parameters(filename).params
+        if 'forward_model' in input_params:
+            params = input_params['forward_model']
+        else:
+            params = input_params
+        forward_model = ForwardModel(params)
+        forward_model.run(plot)
+
+    # elif args.atmosphere == 'retrieve':
+    #     from daneel.atmosphere.retrieval import RetrievalModel
+
+    elif args.atmosphere is not None:
+        print(f"\nUnknown atmosphere flag: {args.atmosphere}")
+        print("Valid options are: model or retrieve.")
     
     finish = datetime.datetime.now()
     print(f"Daneel finishes at {finish}")

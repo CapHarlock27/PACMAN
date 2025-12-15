@@ -1,0 +1,64 @@
+retrieval:
+
+  ##########################################################################
+  # Required input spectrum (OBSERVED)
+  ##########################################################################
+  input_spectrum: "/workspaces/ML_workspace/Tests/observed_spectrum.dat"
+
+  ##########################################################################
+  # Output files
+  ##########################################################################
+  output_retrieved_spectrum: "/workspaces/ML_workspace/Tests/K2-18b_retrieved_spectrum.dat"
+  output_retrieved_params:   "/workspaces/ML_workspace/Tests/K2-18b_retrieved_params.txt"
+  output_retrieved_plot:     "/workspaces/ML_workspace/Tests/K2-18b_retrieved_spectrum.png"
+
+  ##########################################################################
+  # STAR
+  ##########################################################################
+  star:
+    Teff: 3457
+    radius: 0.41
+
+  ##########################################################################
+  # PLANET
+  ##########################################################################
+  planet:
+    radius: 0.211
+    mass:   0.028
+
+  ##########################################################################
+  # ATMOSPHERE 
+  ##########################################################################
+  atmosphere:
+    T_iso: 300.0               # isothermal temperature to retrieve
+    atm_min_pressure: 1e-0
+    atm_max_pressure: 1e6
+    n_layers: 30
+
+  ##########################################################################
+  # CHEMISTRY
+  ##########################################################################
+  chemistry:
+    fill_gases: ["H2", "He"]
+    H2_He_ratio: 0.172
+    molecules: ["H2O"]
+    abundances:
+      H2O: 1e-5     # initial guess (not retrieved)
+
+  ##########################################################################
+  # PARAMETERS TO RETRIEVE (according to TaskD.ipynb)
+  ##########################################################################
+  retrieval_params:
+    H2O:
+      bounds: [1e-8, 1e-2]
+
+    T:            # the isothermal temperature parameter name in TaskD
+      bounds: [200, 500]
+
+  ##########################################################################
+  # OPACITY PATHS (same as point E)
+  ##########################################################################
+  opacity_path: "/workspaces/ML_workspace/Taurex/atmosphere/xsecs"
+  cia_path:      "/workspaces/ML_workspace/Taurex/atmosphere/cia/hitran"
+  cia_pairs: ["H2-H2", "H2-He"]
+

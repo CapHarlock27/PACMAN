@@ -149,7 +149,7 @@ def main():
         forward_model.run(plot)
 
     elif args.atmosphere == 'retrieve':
-        from daneel.atmosphere.retrieval import RetrievalModel
+        from daneel.atmosphere.retrieval import Retrieval
         filename = args.input_files[0]
         plot = args.plot
         input_params = Parameters(filename).params
@@ -157,7 +157,7 @@ def main():
             params = input_params['retrieval']
         else:
             params = input_params
-        retrieval = RetrievalModel(params)
+        retrieval = Retrieval(params)
         retrieval.run(plot)
 
     elif args.atmosphere is not None:

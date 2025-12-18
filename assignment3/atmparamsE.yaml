@@ -23,12 +23,12 @@ forward_model:
   ################################################################################
   # molecules (possible choices: CH4, CO, CO2, H2O, K, Na, O2)
   chemistry:
-    fill_gases: ["H2", "He"]            # fill gases
-    H2_He_ratio: 0.172                  # H2/He ratio
+    fill_gases: ["H2", "He"]              # fill gases
+    H2_He_ratio: 0.172                    # H2/He ratio
     molecules: ["H2O", "CH4", "CO", "CO2"]
     abundances:
-      model: "fixed"                    # "fixed" or "random"
-      CH4: 0.00912                      # volume mixing ratios for fixed abundances
+      model: "fixed"                      # "fixed" or "random"
+      CH4: 0.00912                        # volume mixing ratios for fixed abundances
       CO: 0.001
       CO2: 0.01778
       H2O: 0.00061

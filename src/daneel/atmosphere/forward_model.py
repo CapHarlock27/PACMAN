@@ -1,17 +1,16 @@
 import matplotlib.pyplot as plt
 import matplotlib.ticker as mticker
-from ipywidgets import *
 import numpy as np
 import taurex.log
 taurex.log.disableLogging()
 from taurex.cache import OpacityCache, CIACache
 from taurex.temperature import Guillot2010
 from taurex.planet import Planet
-from taurex.stellar import BlackbodyStar, PhoenixStar
+from taurex.stellar import BlackbodyStar
 from taurex.chemistry import TaurexChemistry, ConstantGas
 from taurex.model import TransmissionModel
 from taurex.contributions import AbsorptionContribution, CIAContribution, RayleighContribution
-from taurex.binning import FluxBinner, SimpleBinner
+from taurex.binning import SimpleBinner
 
 class ForwardModel:
 
@@ -34,15 +33,14 @@ class ForwardModel:
         # Atmospheric Parameters
         atm_params = input_params.get('atmosphere', {})
         self.T_irr = atm_params.get('T_irr')
-        self.atm_min_pressure = float(atm_params.get('atm_min_pressure'))
-        self.atm_max_pressure = float(atm_params.get('atm_max_pressure'))
-        self.nlayers = int(atm_params.get('n_layers'))
+        self.atm_min_pressure = float(atm_params.get('atm_min_pressure', 1e-0))
+        self.atm_max_pressure = float(atm_params.get('atm_max_pressure', 1e6))
+        self.nlayers = int(atm_params.get('n_layers', 30))
         # Chemistry & Abundances
         chemistry_params = input_params.get('chemistry', {})
         self.fill_gases = chemistry_params.get('fill_gases', ['H2', 'He'])
         self.H2_He_ratio = chemistry_params.get('H2_He_ratio', 0.172)
         self.molecules = chemistry_params.get('molecules', [])
-        
         abundance_params = chemistry_params.get('abundances', {})
         self.abundance_model = abundance_params.get('model', 'fixed')
 

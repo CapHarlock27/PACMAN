@@ -1,6 +1,6 @@
-# Daneel
+# PACMAN project
 
-A practical example to detect and characterize exoplanets.
+**PACMAN** (exo**P**l**A**netary **C**omputations that **M**ake **A**stronomers **N**eurotic) is a Python package designed to detect, characterize, and simulate exoplanets. It utilizes the loyal and unbiased **daneel** CLI tool to perform tasks ranging from light curve analysis to atmospheric retrieval.
 
 The full documentation is at https://tiziano1590.github.io/comp_astro_25/index.html
 
@@ -9,20 +9,22 @@ The full documentation is at https://tiziano1590.github.io/comp_astro_25/index.h
 ### Prerequisites
 
 - Python >= 3.10
+- PyTorch
+- TauREx 3 (atmospheric modeling)
 
 ### Install from source
 
 ```bash
-git clone https://github.com/tiziano1590/comp_astro_25.git
-cd comp_astro_25
+git clone https://github.com/CapHarlock27/PACMAN.git
+cd PACMAN
 pip install .
 ```
 
 ### Development installation
 
 ```bash
-git clone https://github.com/tiziano1590/comp_astro_25.git
-cd comp_astro_25
+git clone https://github.com/CapHarlock27/PACMAN.git
+cd PACMAN
 pip install -e .
 ```
 
@@ -36,42 +38,83 @@ daneel -i <input_file> [options]
 
 ### Command-line options
 #### Required
-- `-i, --input`: Path to input parameter file
+- `-i, --input`: Path to input parameter file (YAML) or weights file (for Dream mode)
 #### Main Actions
-- `-t, -- transit`: Plot an exoplanet transit light curve from the input parameters
-- `-d, --detect`: Initialize detection algorithms for exoplanets
+- `-t, --transit`: Plot an exoplanet transit light curve from the input parameters
+- `-d, --detect [rf|cnn]`: Initialize detection algorithms
     - `rf`: Use Random Forest Classifier model to detect exoplanets
     - `cnn`: Use Convolutional Neural Network model to detect exoplanets
-- `--dream`: Generate and plot synthetic exoplanet transit light curves using a GAN trained on TESS data
-    - `--n_plots`: Number of GAN-generated light curves to produce when using --dream. *(Optional; default behavior if omitted)*
-- `-a, --atmosphere`: Perform atmospheric characterization using the supplied transmission spectrum
+- `--dream`: Generate synthetic light curves using a GAN trained on TESS data
+    - `--n_plots <int>`: Number of samples to generate *(Optional; default behavior if omitted. Default: 1)*
+- `-a, --atmosphere [model|retrieve]`: Perform atmospheric characterization
+    - `model`: Generate a forward transmission spectrum using fixed or random molecular abundances
+    - `retrieve`: Performs an atmospheric retrieval through the usage of nested sampling
+    - `--plot <bool>`: Provides the spectrum if True is passed *(Optional; default behavior if omitted)*
 #### Output Control
 - `-o, --output`: Specify the output directory and filename for saving results *(Optional; default behavior if omitted)*
 
 ### Examples
 
 ```bash
-# Run exoplanet transit light curve plot
+# 1. Run exoplanet transit light curve plot
 daneel -i parameters.yaml -t
 
-# Run exoplanet detection using Convolutional Neural Network
+# 2. Run exoplanet detection using Convolutional Neural Network
 daneel -i parameters.yaml -d cnn 
 
-# Run exoplanet detection using Random Forest
+# 3. Run exoplanet detection using Random Forest
 daneel -i parameters.yaml -d rf 
 
-# Run generation of synthetic light curves
-# generates 1 light curve and produce GAN_generated_transits.png
-daneel -i generator_weights.pt --dream      
-# generates 5 light curves and produce syntetic_transit.png in the directory ~/
-daneel -i generator_weights.pt --dream --n_plots 5 -o ~/syntetic_transit.png    
+# 4. Run generation of synthetic light curves (Dream mode)   
+# generates 5 light curves and saves to specific path
+daneel -i generator_weights.pt --dream --n_plots 5 -o ~/synthetic_transit.png    
 
-# Run atmospheric characterization
-daneel -i parameters.yaml -a
+# 5. Run atmospheric forward model
+daneel -i parameters.yaml -a model
 
-# Run both detection and atmospheric analysis
-daneel -i parameters.yaml -d -a
+# 6. Run atmospheric retrival (with plotting)
+daneel -i parameters.yaml -a retrieve --plot True
+
+# 7. Combine both detection and atmospheric retrieval
+daneel -i parameters.yaml -d rf -a retrieve
 ```
+
+## Input File Format
+
+The input file must be a YAML file. Below is a minimal example structure for the different modules:
+
+```bash
+# parameters.yaml example
+
+# Section for Light Curve
+transit:
+  rp: 0.15
+  # ... other transit params
+
+# Section for Detection
+fr:
+  n_bins: 1000
+  samples_per_class: 350
+  # ... other detection params
+
+# Section for Forward Model
+forward_model:
+  planet_name: "K2-18b"
+  chemistry:
+    molecules: ["H2O", "CH4"]
+  # ... other model params
+
+# Section for Retrieval
+retrieval:
+  obs_spectrum: "spectrum.dat"
+  num_live_points: 200
+  atmosphere:
+    atm_min_pressure: 1e-0
+    atm_max_pressure: 1e6
+    n_layers: 30
+  # ... boundaries and other settings
+```
+*For a complete list of parameters, please refer to the **examples/** folder.*
 
 ## Dreaming: Generating Synthetic Transits
 Daneel can "dream" (generate) new synthetic exoplanetary transit light curves using a pre-trained Generative Adversarial Network (GAN).
@@ -116,38 +159,19 @@ class Generator(nn.Module):
 
     def forward(self, input):
         return self.main(input)
+
+# To save weights for Daneel:
+# torch.save(netG.state_dict(), "generator_weights.pt")
 ```
-At the end, save only the state dictionary:
-```python
-# Correct way to save for Daneel
-torch.save(netG.state_dict(), "generator_weights.pt")
-```
-
-## Input File Format
-
-The input file should be a YAML file containing the necessary parameters for the analysis.\
-In this dictionary, consider following the *batman* library parameters format while also adding a key with the name of the selected exoplanet.
-
-### Example
-
-```bash
-name: "K2-18_b"                       # name of the exoplanet
-t0: 0                                 # time of inferior conjunction
-per: 32.939623                        # orbital period
-rp: 0.0212                            # planet radius (in units of stellar radii)
-a: 30.73                              # semi-major axis (in units of stellar radii)
-inc: 89.5785                          # orbital inclination (in degrees)
-ecc: 0.2                              # eccentricity
-w: 354.3                              # longitude of periastron (in degrees)
-u: [0.391617, 0.019183]               # limb darkening coefficients [u1, u2]
-limb_darkening_model: "quadratic"     # limb darkening model
-```
-
 
 ## License
 
 This project is licensed under the MIT License.
 
-## Author
+## Authors
 
+Nicholas Friso (nicholas.friso@studenti.unipd.it)\
+Marko Ivanovski (marko.ivanovski@studenti.unipd.it)\
+Alessandro Matteo Rossi (alessandromatteo.rossi@studenti.unipd.it)\
+Francesco Maria Salion (francescomaria.salion@studenti.unipd.it)\
 Tiziano Zingales (tiziano.zingales@unipd.it)

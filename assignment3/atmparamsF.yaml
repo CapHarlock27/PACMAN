@@ -7,16 +7,16 @@ retrieval:
   planet_radius_boundary: [0.1, 0.3]    # boundary radius of the planet (in Jupiter radii)
   planet_mass: 0.028                    # mass of the planet (in Jupiter masses)
   # path to the opacity and CIA cache directory
-  opacity_path: /ca25/ext_volume/run_daneel/Assignment3_Atmospheres/xsecs
-  cia_path: /ca25/ext_volume/run_daneel/Assignment3_Atmospheres/cia/hitran
+  opacity_path: /workspaces/ML_workspace/Taurex/atmosphere/xsecs
+  cia_path: /workspaces/ML_workspace/Taurex/atmosphere/cia/hitran
   cia_pairs: ["H2-H2", "H2-He"]         # CIA pairs to consider
   # observed spectrum file for comparison
-  obs_spectrum: /ca25/ext_volume/run_daneel/Assignment3_Atmospheres/K2-18b_assignment3_taskB_spectrum.dat
-  num_live_points: 50                   # number of live points for the nested sampling optimizer (50 for debugging, 200+ for final retrieval)
+  obs_spectrum: /workspaces/ML_workspace/PACMAN/file_dump/table_K2-18-b-Madhusudhan-et-al.-2023.dat
+  num_live_points: 100                  # number of live points for the nested sampling optimizer (50 for debugging, 200+ for final retrieval)
   # output files for the forward model spectrum
-  output_params: /ca25/ext_volume/run_daneel/Assignment3_Atmospheres/Tests/K2-18b_assignment3_taskF_parameters.txt
-  output_spectrum: /ca25/ext_volume/run_daneel/Assignment3_Atmospheres/Tests/K2-18b_assignment3_taskF_spectrum.dat
-  output_plot: /ca25/ext_volume/run_daneel/Assignment3_Atmospheres/Tests/K2-18b_assignment3_taskF_spectrum.png
+  output_params: /workspaces/ML_workspace/Tests/K2-18b_assignment3_taskF_parameters.txt
+  output_spectrum: /workspaces/ML_workspace/Tests/K2-18b_assignment3_taskF_spectrum.dat
+  output_plot: /workspaces/ML_workspace/Tests/K2-18b_assignment3_taskF_spectrum.png
   ################################################################################
   # atmospheric parameters
   atmosphere:
@@ -30,10 +30,11 @@ retrieval:
   chemistry:
     fill_gases: ["H2", "He"]            # fill gases
     H2_He_ratio: 0.172                  # H2/He ratio
-    molecules: ["H2O", "CH4", "CO", "CO2"]  # molecules to consider
+    # molecules to consider
+    molecules: ["H2O", "CH4", "CO", "CO2"]
     abundances:
       boundary: [1e-8, 1e-2]            # boundary for molecular abundances (volume mixing ratios)
-      CH4: 0.00912                      # volume mixing ratios for fixed abundances
+      CH4: 0.00912                      # volume mixing ratios
       CO: 0.001
       CO2: 0.01778
       H2O: 0.00061

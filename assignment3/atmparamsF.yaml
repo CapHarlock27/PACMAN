@@ -12,11 +12,11 @@ retrieval:
   cia_pairs: ["H2-H2", "H2-He"]         # CIA pairs to consider
   # observed spectrum file for comparison
   obs_spectrum: /workspaces/ML_workspace/PACMAN/file_dump/table_K2-18-b-Madhusudhan-et-al.-2023.dat
-  num_live_points: 100                  # number of live points for the nested sampling optimizer (50 for debugging, 200+ for final retrieval)
+  num_live_points: 200                  # number of live points for the nested sampling optimizer (50 for debugging, 200+ for final retrieval)
   # output files for the forward model spectrum
-  output_params: /workspaces/ML_workspace/Tests/K2-18b_assignment3_taskF_parameters.txt
+  output_params: /workspaces/ML_workspace/PACMAN/assignment3/assignment3_taskD.txt
   output_spectrum: /workspaces/ML_workspace/Tests/K2-18b_assignment3_taskF_spectrum.dat
-  output_plot: /workspaces/ML_workspace/Tests/K2-18b_assignment3_taskF_spectrum.png
+  output_plot: /workspaces/ML_workspace/PACMAN/assignment3/assignment3_taskD.png
   ################################################################################
   # atmospheric parameters
   atmosphere:
